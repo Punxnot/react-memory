@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Memory Game</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="container"></div>
+    <script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+    <script type="text/babel">
+      class Card extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {open: false, className: "flip-container"};
+          this.onCardClick = this.onCardClick.bind(this);
+        }
+
+        onCardClick(e) {
+          if (!this.state.open) {
+            this.props.onClick(e);
+            this.setState({className: "flip-container animate", open: true});
+          }
+        }
+
+        componentWillUpdate(nextProps, nextState) {
+          var alreadyGuessed = this.props.guessedList.indexOf(this.back.style.backgroundImage) >= 0;
+          if (this.props.gameState === 0 && this.state.open && !alreadyGuessed) {
+            this.setState({className: "flip-container", open: false});
+          }
+        }
+
+        render() {
+          return (
+            <div className="card" onClick={this.onCardClick}>
+              <div className={this.state.className}>
+                <div className="flipper">
+                  <div className="front"></div>
+                  <div className="back" ref={(div) => { this.back = div; }} style={{backgroundImage: "url(img/cars/" + this.props.number + ".png)"}}></div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      class Board extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {guessed: false, cardsArray: []};
+        }
+
+        shuffle(array) {
+          var currentIndex = array.length;
+          while (currentIndex != 0) {
+            var randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+            var temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+          }
+          return array;
+        }
+
+        renderCard(i, num, guessed) {
+          return <Card number={num} key={i.toString()} onClick={this.props.onClick} gameState={this.props.gameState} guessed={guessed} guessedList={this.props.guessedList} />;
+        }
+
+        componentWillUpdate(nextProps, nextState) {
+          // Compare open cards
+          if (nextProps.secondCard && nextProps.secondCard === nextProps.firstCard) {
+            this.guessed = true;
+          } else {
+            this.guessed = false;
+          }
+        }
+
+        componentWillMount() {
+          // Create and shuffle array of numbers
+          var arr = Array.apply(null, {length: this.props.cardsNum}).map(Function.call, Number);
+          arr = this.shuffle(arr);
+          this.setState({cardsArray: arr});
+        }
+
+        render() {
+          var cards = [];
+
+          // Create cards
+          for (var i in this.state.cardsArray) {
+            var num;
+            if (this.state.cardsArray[i] < 8) {
+              num = this.state.cardsArray[i];
+            } else {
+              num = this.state.cardsArray[i] - 8;
+            }
+            var guessed = this.guessed;
+            cards.push(this.renderCard(i, num, guessed));
+          }
+
+          return (
+              <div className="cards-container clearfix">
+                {cards}
+              </div>
+          )
+        }
+      }
+
+      class Game extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {gameState: 0, firstCard: null, secondCard: null, guessedList: []};
+          this.changeGameState = this.changeGameState.bind(this);
+        }
+
+        changeGameState(e) {
+          var card = e.currentTarget.querySelector(".back").style.backgroundImage;
+          if (this.state.gameState === 0) {
+            this.setState({gameState: 1, firstCard: card});
+          } else if (this.state.gameState === 1) {
+            this.setState({gameState: 0, secondCard: card});
+            if (card === this.state.firstCard) {
+              this.state.guessedList.push(this.state.firstCard);
+            }
+            this.setState({firstCard: null});
+          }
+        }
+
+        render() {
+          return (
+            <div className="game-container">
+              <div className="game-board">
+                <Board cardsNum="16" onClick={this.changeGameState} gameState={this.state.gameState} guessedList={this.state.guessedList} />
+              </div>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(
+        <Game />,
+        document.getElementById('container')
+      );
+    </script>
+  </body>
+</html>
