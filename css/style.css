@@ -1,57 +1,27 @@
-@font-face {
-  font-family: Cake;
-  src: url(../fonts/cake.ttf);
-}
-@-webkit-keyframes cardAppear {
+@-webkit-keyframes neon {
   0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@keyframes cardAppear {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@-webkit-keyframes scorePulse {
-  0% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
-    opacity: 1;
+    box-shadow: 0 0 10px #1ca7cb;
   }
   50% {
-    -webkit-transform: scale(1.2);
-            transform: scale(1.2);
-    opacity: 0.5;
+    box-shadow: 0 0 15px #1ca7cb;
   }
   100% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
-    opacity: 1;
+    box-shadow: 0 0 10px #1ca7cb;
   }
 }
-@keyframes scorePulse {
+
+@keyframes neon {
   0% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
-    opacity: 1;
+    box-shadow: 0 0 10px #1ca7cb;
   }
   50% {
-    -webkit-transform: scale(1.2);
-            transform: scale(1.2);
-    opacity: 0.5;
+    box-shadow: 0 0 15px #1ca7cb;
   }
   100% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
-    opacity: 1;
+    box-shadow: 0 0 10px #1ca7cb;
   }
 }
+
 body,
 h1,
 h2,
@@ -80,22 +50,10 @@ label, input, select, button {
   clear: both;
 }
 
-.sample-card-container {
-  display: none;
-}
-
-.logo {
-  font-family: Cake, "Comic Sans MS", sans-serif;
-  font-size: 34px;
-}
-
 .game-container {
   text-align: center;
   min-width: 650px;
   min-height: 400px;
-}
-.game-container.large {
-  min-width: 830px;
 }
 
 .cards-container {
@@ -107,113 +65,24 @@ label, input, select, button {
   margin-top: 20px;
 }
 
-.large .cards-container {
-  width: 520px;
-}
-
 .card {
   float: left;
   width: 70px;
   height: 124px;
   margin-right: 20px;
   margin-bottom: 20px;
-  opacity: 0;
-  -webkit-animation: cardAppear .5s forwards;
-          animation: cardAppear .5s forwards;
+  opacity: 1;
 }
+
 .card:nth-of-type(4n) {
   margin-right: 0;
 }
 
-.large .card:nth-of-type(4n) {
-  margin-right: 20px;
-}
-
-.large .card:nth-of-type(6n) {
-  margin-right: 0;
-}
-
-.message-container {
-  margin-bottom: 10px;
-}
-
-.settings {
-  margin: 20px 0;
-  font-size: 18px;
-}
-.settings > div {
-  margin-bottom: 15px;
-}
-.settings .settings-item-title {
-  margin-bottom: 5px;
-  font-size: 18px;
-  font-weight: normal;
-}
-.settings select {
-  display: inline-block;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  padding: 10px 15px;
-  padding-right: 25px;
-  font-size: 14px;
-  background: #16829e url("http://match4shaadi.com/images/select-arrow.png") no-repeat 95% 50%;
-  background-size: 12px;
-  color: white;
-  border: none;
-  border-radius: 0;
-}
-.settings select:focus {
-  outline: none;
-}
-.settings select:hover {
-  background-color: #1ca7cb;
-}
-
-.text-container {
-  display: inline-block;
-  vertical-align: top;
-  width: 280px;
-  padding: 20px;
-  text-align: center;
-  font-size: 24px;
-  color: #16829e;
-}
-.text-container label {
-  display: block;
-  margin-bottom: 10px;
-}
-.text-container label input {
-  margin-right: 10px;
-  display: inline-block;
-  vertical-align: top;
-}
-.text-container input + label {
-  display: inline-block;
-}
-.text-container p {
-  font-size: 14px;
-}
-
-.btn {
-  border: none;
-  outline: none;
-  display: inline-block;
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #16829e;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-}
-.btn:hover {
-  background-color: #1ca7cb;
-}
-
-.players-score,
-.bots-score {
-  font-size: 18px;
-  font-weight: bold;
+.glow {
+  -webkit-animation: neon 1s forwards;
+  animation: neon 1s forwards;
+  -webkit-animation-delay: .2s;
+  animation-delay: .2s;
 }
 
 .flip-container {
@@ -265,57 +134,4 @@ label, input, select, button {
   background-size: 90%;
   background-repeat: no-repeat;
   background-position: center;
-}
-
-.not-clickable {
-  pointer-events: none;
-}
-
-.choose-theme {
-  margin-top: 10px;
-  font-size: 18px;
-}
-.choose-theme label {
-  display: block;
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-.bot-type {
-  margin-top: 10px;
-  max-height: 0;
-  overflow: hidden;
-  -webkit-transition: max-height .3s;
-  transition: max-height .3s;
-}
-.bot-type label {
-  display: inline-block;
-  font-size: 14px;
-}
-
-.choose-mode[data-mode="botMode"]:checked ~ .bot-type {
-  max-height: 200px;
-}
-
-.choose-num {
-  font-size: 34px;
-  font-family: Cake, "Comic Sans MS", sans-serif;
-}
-
-.custom-input {
-  display: none;
-}
-
-.custom-input + label {
-  display: inline-block;
-  padding: 5px 10px;
-}
-
-.custom-input:checked + label {
-  background-color: #bdeaf6;
-}
-
-.score-animated {
-  -webkit-animation: scorePulse .5s forwards;
-          animation: scorePulse .5s forwards;
 }

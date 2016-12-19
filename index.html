@@ -69,7 +69,6 @@
         }
 
         componentWillUpdate(nextProps, nextState) {
-          // Compare open cards
           if (nextProps.secondCard && nextProps.secondCard === nextProps.firstCard) {
             this.guessed = true;
           } else {
@@ -110,7 +109,7 @@
       class Game extends React.Component {
         constructor(props) {
           super(props);
-          this.state = {gameState: 0, firstCard: null, secondCard: null, guessedList: []};
+          this.state = {gameState: 0, firstCard: null, secondCard: null, guessedList: [], currentPair: []};
           this.changeGameState = this.changeGameState.bind(this);
         }
 
@@ -118,12 +117,17 @@
           var card = e.currentTarget.querySelector(".back").style.backgroundImage;
           if (this.state.gameState === 0) {
             this.setState({gameState: 1, firstCard: card});
+            this.state.currentPair.push(e.currentTarget);
           } else if (this.state.gameState === 1) {
             this.setState({gameState: 0, secondCard: card});
+            this.state.currentPair.push(e.currentTarget);
             if (card === this.state.firstCard) {
+              for (var i in this.state.currentPair) {
+                this.state.currentPair[i].classList.add("glow");
+              }
               this.state.guessedList.push(this.state.firstCard);
             }
-            this.setState({firstCard: null});
+            this.setState({firstCard: null, currentPair: []});
           }
         }
 
